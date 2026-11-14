@@ -97,7 +97,7 @@ CREATE TABLE [ABASTECIMIENTO] (
   [Estado_Operacion] varchar(30) DEFAULT 'Pendiente',
   [ID_Proveedor] int NOT NULL,
   [Fecha_Recepcion] date,
-  [Total] decimal(12,2),
+  [Total_Producto_Recibido] decimal(12,2),
   [ID_Usuario_Responsable] int,
   [Observaciones] text
 )
@@ -106,29 +106,12 @@ GO
 CREATE TABLE [DETALLE_ABASTECIMIENTO] (
   [ID_Detalle] int PRIMARY KEY IDENTITY(1, 1),
   [Cantidad] int NOT NULL,
-  [Cantidad_Recibida] int DEFAULT (0),
+  [Cantidad_Recibida] int DEFAULT 0,
   [ID_Abastecimiento] int NOT NULL,
   [ID_Producto] int NOT NULL,
   [Precio_Compra] decimal(10,2) NOT NULL,
-  [Subtotal] decimal(12,2) NOT NULL
-)
-GO
-
-CREATE TABLE [PRODUCTO] (
-  [ID_Producto] int PRIMARY KEY IDENTITY(1, 1),
-  [Nombre_Producto] varchar(150) NOT NULL,
-  [Descripcion] text,
-  [Categoria] varchar(100),
-  [Precio_Unitario] decimal(10,2) NOT NULL,
-  [Estado] varchar(20) DEFAULT 'Activo'
-)
-GO
-
-CREATE TABLE [INVENTARIO] (
-  [ID_Inventario] int PRIMARY KEY IDENTITY(1, 1),
-  [Existencias_Actuales] int NOT NULL DEFAULT (0),
-  [Stock_Minimo] int NOT NULL DEFAULT (5),
-  [ID_Producto] int NOT NULL
+  [Subtotal] decimal(12,2) NOT NULL,
+  [Fecha_Recepcion_Producto] date
 )
 GO
 
@@ -315,13 +298,13 @@ GO
 ALTER TABLE [DETALLE_ABASTECIMIENTO] ADD FOREIGN KEY ([ID_Abastecimiento]) REFERENCES [ABASTECIMIENTO] ([ID_Abastecimiento])
 GO
 
-ALTER TABLE [DETALLE_ABASTECIMIENTO] ADD FOREIGN KEY ([ID_Producto]) REFERENCES [PRODUCTO] ([ID_Producto])
+ALTER TABLE [DETALLE_ABASTECIMIENTO] ADD FOREIGN KEY ([ID_Producto]) REFERENCES [PRODUCTO] ([id])
 GO
 
-ALTER TABLE [INVENTARIO] ADD FOREIGN KEY ([ID_Producto]) REFERENCES [PRODUCTO] ([ID_Producto])
+ALTER TABLE [INVENTARIO] ADD FOREIGN KEY ([ID_Producto]) REFERENCES [PRODUCTO] ([id])
 GO
 
-ALTER TABLE [MOVIMIENTO_INVENTARIO] ADD FOREIGN KEY ([ID_Inventario]) REFERENCES [INVENTARIO] ([ID_Inventario])
+ALTER TABLE [MOVIMIENTO_INVENTARIO] ADD FOREIGN KEY ([ID_Inventario]) REFERENCES [INVENTARIO] ([id_inventario])
 GO
 
 ALTER TABLE [MOVIMIENTO_INVENTARIO] ADD FOREIGN KEY ([ID_Abastecimiento]) REFERENCES [ABASTECIMIENTO] ([ID_Abastecimiento])
